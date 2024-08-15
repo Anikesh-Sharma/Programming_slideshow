@@ -7,21 +7,42 @@ const movieImages = [
     '5.jpg'
 ];
 
-// Function to get a random index from the array
+let currentIndex = getRandomIndex(movieImages.length);
+const slideshowElement = document.getElementById('slideshow');
+let intervalId = setInterval(changeImage, 2000);
+
+slideshowElement.src = movieImages[currentIndex];
+
 function getRandomIndex(max) {
     return Math.floor(Math.random() * max);
 }
 
-// Initialize the slideshow with a random image
-let currentIndex = getRandomIndex(movieImages.length);
-const slideshowElement = document.getElementById('slideshow');
-slideshowElement.src = movieImages[currentIndex];
-
-// Function to change the image in the slideshow
 function changeImage() {
     currentIndex = (currentIndex + 1) % movieImages.length;
     slideshowElement.src = movieImages[currentIndex];
 }
 
-// Set the interval to change the image every 2000ms (2 seconds)
-setInterval(changeImage, 2000);
+function prevImage() {
+    currentIndex = (currentIndex - 1 + movieImages.length) % movieImages.length;
+    slideshowElement.src = movieImages[currentIndex];
+}
+
+function nextImage() {
+    changeImage();
+}
+
+function togglePlayPause() {
+    const playPauseButton = document.getElementById('playPause');
+    if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+        playPauseButton.textContent = 'Play';
+    } else {
+        intervalId = setInterval(changeImage, 2000);
+        playPauseButton.textContent = 'Pause';
+    }
+}
+
+document.getElementById('prev').addEventListener('click', prevImage);
+document.getElementById('next').addEventListener('click', nextImage);
+document.getElementById('playPause').addEventListener('click', togglePlayPause);
